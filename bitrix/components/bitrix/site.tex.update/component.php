@@ -12,6 +12,29 @@
 	}
 
 
+	function nacenka($price)
+	{
+		$nacenka = array(//список наценок в процентах в зависимости от суммы
+			'10' => '100',
+			'50' => '50',
+			'100' => '30',
+			'250' => '25',
+			'500' => '20',
+			'1000' => '15',
+			'5000' => '12',
+			'10000' => '10',
+			'20000' => '8'
+		);
+
+		$procent = 7;
+		foreach ($nacenka as $key => $vol) {
+			if($price < $key){
+				$procent = $vol;
+			}
+		}
+		$edinica = $price / 100;
+		return (int)$price + ((int)$edinica * (int)$procent);
+	}
 
 	function translit($str)
 	{
@@ -500,6 +523,7 @@
 						"PRODUCT_ID" => $node_id,
 						"EXTRA_ID" => 1,
 						"CATALOG_GROUP_ID" => 2,
+//						"PRICE" => nacenka($price),
 						"PRICE" => $price * 1.10,
 						"CURRENCY" => $currency
 					);
