@@ -65,13 +65,46 @@
 <?
 	$adress = 'http://forum3.ru/?cmd=show_tovar&code=' . $arResult["XML_ID"];
 	$html = file_get_contents($adress);
-	$a = explode('<table>',$html);
-	$a = explode('</table>',$a[1]);
-	$text = iconv("windows-1251", "utf-8", $a[0]);
-	echo $text;
+//	$a = explode('<table>',$html);
+//	$a = explode('</table>',$a[1]);
+//	$text = iconv("windows-1251", "utf-8", $a[0]);
+//	echo $text;
 
+	preg_match_all("/<tr>(.*)<\/tr>/isU", str_replace(array(
+		"\n",
+		"<br/>",
+		"\r",
+		"\t"
+	), array(
+		"",
+		"",
+		"",
+		""
+	), iconv("windows-1251", "utf-8", $html)), $nodes);
+
+	foreach ($nodes[1] as $vol) {
+		preg_match_all("/<th>(.*)<\/th>/sU", $vol, $descriptions);
+		preg_match_all("/<td><li(.*)>(.*)<\/td>/sU", $vol, $values);
+		$pars_result[] = array(
+			'des' => $descriptions[1][0],
+			'vol' => $values[2]
+		);
+	}
+	$str = '';
+
+	foreach ($pars_result as $key => $vol) {
+
+		$class     = $key == 0 ? " first" : "";
+		$number    = $key &1 ? "2" : "1";
+		$box_round = $key & 1 ? "" : "box-round-5";
+		$str .= "<div class='opis-box{$number} {$box_round} {$class}'>";
+		$str .= "<div class='opis-right'>{$vol['vol'][0]}</div>{$vol['des']}</div>";
+	}
 
 ?>
+<?= $str ?>
+<!--<pre style = "text-align: left">--><?// print_r($pars_result) ?><!--</pre>-->
+
 
 <? if ($arResult["PREVIEW_TEXT"]): ?>
 	<?= $arResult["PREVIEW_TEXT"] ?>
