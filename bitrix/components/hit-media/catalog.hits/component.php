@@ -12,18 +12,23 @@
 			FROM
 			b_iblock_element as tovar
 		WHERE
-		   tovar.IBLOCK_ID IN(3,4,10)
+		   tovar.IBLOCK_ID IN(3,4,10) AND
+		   !isNull(tovar.DETAIL_PICTURE)
+
 		   ORDER BY RAND()
 		   LIMIT 3
 			";
-	 $t = $DB->Query($q);
-	while($temp = $t->Fetch()){
+	$t = $DB->Query($q);
+	while ($temp = $t->Fetch()) {
 		$ids[] = $temp['ID'];
 	}
-	$res = CIBlockElement::GetList(array(),array('ID' => $ids));
-	while($tovar = $res->Fetch()){
-		$prices = CPrice::GetList(array(),array("PRODUCT_ID" => $tovar['ID']))->Fetch();
-		$tovar['PRICES'] = $prices;
+	$res = CIBlockElement::GetList(array(), array(
+			'ID' => $ids,
+		));
+	while ($tovar = $res->GetNext()) {
+		$prices              = CPrice::GetList(array(), array("PRODUCT_ID" => $tovar['ID']))
+				->Fetch();
+		$tovar['PRICES']     = $prices;
 		$arResult['ITEMS'][] = $tovar;
 	}
 

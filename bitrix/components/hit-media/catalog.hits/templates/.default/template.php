@@ -15,12 +15,11 @@
 		<div class = "tovar-item <?=$last?>"><a class = "category box-round-5" href = "#"><?= $tovar['NAME'] ?></a>
 
 			<div class = "tovar-box1">
-				<a href = "#"><img src = "<?= $img['src'] ?>"></a></div>
-			<a href = "#" class = "tov-name-item"><?= $tovar['NAME'] ?></a>
+				<a href = "<?=$tovar['DETAIL_PAGE_URL']?>"><img src = "<?= $img['src'] ?>"></a></div>
+			<a href = "<?=$tovar['DETAIL_PAGE_URL']?>" class = "tov-name-item"><?= $tovar['NAME'] ?></a>
 
 			<div class = "tovar-cena"><?=
 					str_replace("руб", "", CurrencyFormat($tovar['PRICES']['PRICE'], $tovar['PRICES']['CURRENCY']))?><span>руб.</span> </div>
 			<a href = "#" class = "kupit btn-blue">Купить</a></div>
 	<? endforeach ?>
-
 </div>
